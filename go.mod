@@ -1,4 +1,4 @@
-module github.com/pingcap/failpoint
+module github.com/nasuni-labs/failpoint
 
 require (
 	github.com/pingcap/errors v0.11.4
