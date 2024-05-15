@@ -23,8 +23,8 @@ import (
 	"runtime"
 	"strings"
 
+	"github.com/nasuni-labs/failpoint/code"
 	"github.com/pingcap/errors"
-	"github.com/pingcap/failpoint/code"
 	"golang.org/x/mod/modfile"
 )
 

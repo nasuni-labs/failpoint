@@ -23,7 +23,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/pingcap/failpoint/code"
+	"github.com/nasuni-labs/failpoint/code"
 )
 
 func TestRewrite(t *testing.T) {

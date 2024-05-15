@@ -22,7 +22,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 	"github.com/stretchr/testify/require"
 )
 
