@@ -28,7 +28,7 @@ import (
 )
 
 const (
-	packagePath     = "github.com/pingcap/failpoint"
+	packagePath     = "github.com/nasuni-labs/failpoint"
 	packageName     = "failpoint"
 	evalFunction    = "Eval"
 	evalCtxFunction = "EvalContext"

@@ -46,7 +46,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -61,7 +61,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -77,7 +77,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -97,7 +97,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -112,7 +112,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -129,7 +129,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -150,7 +150,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -165,7 +165,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -182,7 +182,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -248,7 +248,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
@@ -263,7 +263,7 @@ package rewriter_test
 import (
 	"fmt"
 
-	"github.com/pingcap/failpoint"
+	"github.com/nasuni-labs/failpoint"
 )
 
 func unittest() {
