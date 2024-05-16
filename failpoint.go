@@ -68,6 +68,8 @@ func (fp *Failpoint) Enable(inTerms string) error {
 	return nil
 }
 
+// EnableWithValue enables failpoint with given terms and value. Value can be
+// retrieved back with GetValue call.
 func (fp *Failpoint) EnableWithValue(inTerms string, value interface{}) error {
 	t, err := newTerms(inTerms, fp)
 	if err != nil {
@@ -102,6 +104,7 @@ func (fp *Failpoint) EnableWith(inTerms string, action func() error) error {
 	return nil
 }
 
+// IsEnabled returns true if failpoint is enabled.
 func (fp *Failpoint) IsEnabled() bool {
 	fp.mu.RLock()
 	defer fp.mu.RUnlock()
@@ -109,6 +112,7 @@ func (fp *Failpoint) IsEnabled() bool {
 	return fp.t != nil
 }
 
+// Spin will spin till failpoint is disabled.
 func (fp *Failpoint) Spin() {
 	for {
 		if !fp.IsEnabled() {
@@ -151,6 +155,7 @@ func (fp *Failpoint) Eval() (Value, error) {
 	return v, nil
 }
 
+// WaitForHit spins till failpoint is evaluated
 func (fp *Failpoint) WaitForHit(timeoutSec uint) error {
 	done := make(chan bool)
 	go func() {
@@ -174,6 +179,7 @@ func (fp *Failpoint) WaitForHit(timeoutSec uint) error {
 	}
 }
 
+// GetValue returns value set by EnableWithValue
 func (fp *Failpoint) GetValue() interface{} {
 	fp.mu.RLock()
 	defer fp.mu.RUnlock()

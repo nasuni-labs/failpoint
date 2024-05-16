@@ -135,6 +135,8 @@ func (fps *Failpoints) EnableWith(failpath, inTerms string, action func() error)
 	return nil
 }
 
+// EnableWithValue enables failpoint with given terms and value. Value can be
+// retrieved back with GetValue call.
 func (fps *Failpoints) EnableWithValue(failpath, inTerms string, value interface{}) error {
 	fps.mu.Lock()
 	defer fps.mu.Unlock()
@@ -155,6 +157,7 @@ func (fps *Failpoints) EnableWithValue(failpath, inTerms string, value interface
 	return nil
 }
 
+// IsEnabled returns true if failpoint is enabled.
 func (fps *Failpoints) IsEnabled(failpath string) bool {
 	fps.mu.RLock()
 	fp, found := fps.reg[failpath]
@@ -165,6 +168,7 @@ func (fps *Failpoints) IsEnabled(failpath string) bool {
 	return fp.IsEnabled()
 }
 
+// Spin will spin till failpoint is disabled.
 func (fps *Failpoints) Spin(failpath string) error {
 	fps.mu.RLock()
 	fp, found := fps.reg[failpath]
@@ -206,7 +210,7 @@ func (fps *Failpoints) Status(failpath string) (string, error) {
 	return t.desc, nil
 }
 
-// Wait for given failpoint to be hit
+// WaitForHit spins till failpoint is evaluated
 func (fps *Failpoints) WaitForHit(failpath string, timeoutSec uint) error {
 	fps.mu.RLock()
 	fp, found := fps.reg[failpath]
@@ -217,6 +221,7 @@ func (fps *Failpoints) WaitForHit(failpath string, timeoutSec uint) error {
 	return fp.WaitForHit(timeoutSec)
 }
 
+// GetValue returns value set by EnableWithValue
 func (fps *Failpoints) GetValue(failpath string) (interface{}, error) {
 	fps.mu.RLock()
 	fp, found := fps.reg[failpath]
@@ -294,10 +299,13 @@ func EnableWith(failpath, inTerms string, action func() error) error {
 	return failpoints.EnableWith(failpath, inTerms, action)
 }
 
+// EnableWithValue enables failpoint with given terms and value. Value can be
+// retrieved back with GetValue call.
 func EnableWithValue(failpath, inTerms string, value interface{}) error {
 	return failpoints.EnableWithValue(failpath, inTerms, value)
 }
 
+// IsEnabled returns true if failpoint is enabled.
 func IsEnabled(failpath string) bool {
 	return failpoints.IsEnabled(failpath)
 }
@@ -352,10 +360,12 @@ func Eval(failpath string) (Value, error) {
 	return val, err
 }
 
+// WaitForHit spins till failpoint is evaluated
 func WaitForHit(failpath string, timeoutSec uint) error {
 	return failpoints.WaitForHit(failpath, timeoutSec)
 }
 
+// GetValue returns value set by EnableWithValue
 func GetValue(failpath string) (interface{}, error) {
 	return failpoints.GetValue(failpath)
 }
