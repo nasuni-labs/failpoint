@@ -15,7 +15,6 @@
 package code_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -2442,7 +2441,7 @@ func unittest() {
 	require.NoError(t, err)
 	for _, cs := range cases {
 		original := filepath.Join(rewritePath, cs.filepath)
-		err := ioutil.WriteFile(original, []byte(cs.original), 0644)
+		err := os.WriteFile(original, []byte(cs.original), 0644)
 		require.NoError(t, err)
 	}
 
@@ -2458,7 +2457,7 @@ func unittest() {
 
 	for _, cs := range cases {
 		expected := filepath.Join(rewritePath, cs.filepath)
-		content, err := ioutil.ReadFile(expected)
+		content, err := os.ReadFile(expected)
 		require.NoError(t, err)
 		require.Equalf(t, strings.TrimSpace(cs.expected), strings.TrimSpace(string(content)), "%v", cs.filepath)
 	}
@@ -2470,7 +2469,7 @@ func unittest() {
 
 	for _, cs := range cases {
 		original := filepath.Join(rewritePath, cs.filepath)
-		content, err := ioutil.ReadFile(original)
+		content, err := os.ReadFile(original)
 		require.NoError(t, err)
 		require.Equal(t, cs.original, string(content))
 	}
@@ -3604,7 +3603,7 @@ label:
 	require.NoError(t, err)
 	for _, cs := range cases {
 		original := filepath.Join(rewritePath, cs.filepath)
-		err := ioutil.WriteFile(original, []byte(cs.original), 0644)
+		err := os.WriteFile(original, []byte(cs.original), 0644)
 		require.NoError(t, err)
 	}
 
@@ -3622,7 +3621,7 @@ label:
 		require.Error(t, err)
 		require.Regexp(t, cs.errormsg, err.Error(), "%v", cs.filepath)
 
-		content, err := ioutil.ReadFile(original)
+		content, err := os.ReadFile(original)
 		require.NoError(t, err)
 		require.Equalf(t, cs.original, string(content), "%v", cs.filepath)
 	}

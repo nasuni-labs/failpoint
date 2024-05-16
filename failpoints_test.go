@@ -15,7 +15,7 @@
 package failpoint_test
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"testing"
 	"time"
@@ -199,7 +199,7 @@ func TestFailpoints(t *testing.T) {
 	// copy the output in a separate goroutine so printing can't block indefinitely
 	go func() {
 		defer close(outC)
-		s, err := ioutil.ReadAll(r)
+		s, err := io.ReadAll(r)
 		require.NoError(t, err)
 		outC <- string(s)
 	}()

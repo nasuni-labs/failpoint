@@ -15,7 +15,6 @@
 package code_test
 
 import (
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -201,7 +200,7 @@ func unittest() {
 	require.NoError(t, err)
 	for _, cs := range cases {
 		original := filepath.Join(restorePath, cs.filepath)
-		err := ioutil.WriteFile(original, []byte(cs.original), 0644)
+		err := os.WriteFile(original, []byte(cs.original), 0644)
 		require.NoError(t, err)
 	}
 
@@ -217,7 +216,7 @@ func unittest() {
 
 	for _, cs := range cases {
 		modified := filepath.Join(restorePath, cs.filepath)
-		err := ioutil.WriteFile(modified, []byte(cs.modified), 0644)
+		err := os.WriteFile(modified, []byte(cs.modified), 0644)
 		require.NoError(t, err)
 	}
 
@@ -228,7 +227,7 @@ func unittest() {
 
 	for _, cs := range cases {
 		expected := filepath.Join(restorePath, cs.filepath)
-		content, err := ioutil.ReadFile(expected)
+		content, err := os.ReadFile(expected)
 		require.NoError(t, err)
 		require.Equalf(t, strings.TrimSpace(cs.expected), strings.TrimSpace(string(content)), "%v", cs.filepath)
 	}
@@ -281,7 +280,7 @@ func unittest() {
 	require.NoError(t, err)
 	for _, cs := range cases {
 		original := filepath.Join(restorePath, cs.filepath)
-		err := ioutil.WriteFile(original, []byte(cs.original), 0644)
+		err := os.WriteFile(original, []byte(cs.original), 0644)
 		require.NoError(t, err)
 	}
 
@@ -297,7 +296,7 @@ func unittest() {
 
 	for _, cs := range cases {
 		modified := filepath.Join(restorePath, cs.filepath)
-		err := ioutil.WriteFile(modified, []byte(cs.modified), 0644)
+		err := os.WriteFile(modified, []byte(cs.modified), 0644)
 		require.NoError(t, err)
 	}
 

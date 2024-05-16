@@ -16,7 +16,7 @@ package failpoint_test
 
 import (
 	"errors"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -113,14 +113,14 @@ func TestServeHTTP(t *testing.T) {
 	resp, err := http.Get("http://127.0.0.1:23389/failpoint-env1")
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, resp.StatusCode)
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	require.NoError(t, err)
 	require.Contains(t, string(body), "return(10)")
 
 	resp, err = http.Get("http://127.0.0.1:23389/failpoint-env2")
 	require.NoError(t, err)
 	require.Equal(t, http.StatusOK, resp.StatusCode)
-	body, err = ioutil.ReadAll(resp.Body)
+	body, err = io.ReadAll(resp.Body)
 	require.NoError(t, err)
 	require.Contains(t, string(body), "return(true)")
 }
