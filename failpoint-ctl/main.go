@@ -19,8 +19,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/pingcap/failpoint/code"
-	"github.com/pingcap/failpoint/failpoint-ctl/version"
+	"github.com/nasuni-labs/failpoint/code"
+	"github.com/nasuni-labs/failpoint/failpoint-ctl/version"
 )
 
 func main() {

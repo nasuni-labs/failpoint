@@ -17,7 +17,6 @@ package code
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
@@ -88,11 +87,11 @@ func (r Restorer) Restore() error {
 			continue
 		}
 		originFileName := filePath[:len(filePath)-len(failpointStashFileSuffix)]
-		rewritedContent, err := ioutil.ReadFile(originFileName)
+		rewritedContent, err := os.ReadFile(originFileName)
 		if err != nil {
 			return err
 		}
-		originContent, err := ioutil.ReadFile(filePath)
+		originContent, err := os.ReadFile(filePath)
 		if err != nil {
 			return err
 		}
@@ -114,7 +113,7 @@ func (r Restorer) Restore() error {
 				return fmt.Errorf("cannot merge modifications back automatically %s", patches[i].String())
 			}
 		}
-		if err := ioutil.WriteFile(filePath, []byte(pathedContent), 0644); err != nil {
+		if err := os.WriteFile(filePath, []byte(pathedContent), 0644); err != nil {
 			return err
 		}
 		if err := os.Remove(originFileName); err != nil {
@@ -157,5 +156,5 @@ func %s(name string) string {
 	return  __failpointBindingCache.pkgpath + "/" + name
 }
 `, pak, ExtendPkgName)
-	return ioutil.WriteFile(bindingFile, []byte(bindingContent), 0644)
+	return os.WriteFile(bindingFile, []byte(bindingContent), 0644)
 }

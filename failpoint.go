@@ -17,6 +17,9 @@ package failpoint
 import (
 	"context"
 	"sync"
+	"time"
+
+	"github.com/pingcap/errors"
 )
 
 const failpointCtxKey HookKey = "__failpoint_ctx_key__"
@@ -41,6 +44,8 @@ type (
 		mu       sync.RWMutex
 		t        *terms
 		waitChan chan struct{}
+		hitCnt   uint
+		value    interface{}
 	}
 )
 
@@ -56,9 +61,26 @@ func (fp *Failpoint) Enable(inTerms string) error {
 		return err
 	}
 	fp.mu.Lock()
+	defer fp.mu.Unlock()
 	fp.t = t
+	fp.hitCnt = 0
 	fp.waitChan = make(chan struct{})
-	fp.mu.Unlock()
+	return nil
+}
+
+// EnableWithValue enables failpoint with given terms and value. Value can be
+// retrieved back with GetValue call.
+func (fp *Failpoint) EnableWithValue(inTerms string, value interface{}) error {
+	t, err := newTerms(inTerms, fp)
+	if err != nil {
+		return err
+	}
+	fp.mu.Lock()
+	defer fp.mu.Unlock()
+	fp.t = t
+	fp.hitCnt = 0
+	fp.waitChan = make(chan struct{})
+	fp.value = value
 	return nil
 }
 
@@ -74,11 +96,30 @@ func (fp *Failpoint) EnableWith(inTerms string, action func() error) error {
 	fp.mu.Lock()
 	defer fp.mu.Unlock()
 	fp.t = t
+	fp.hitCnt = 0
 	fp.waitChan = make(chan struct{})
 	if err := action(); err != nil {
 		return err
 	}
 	return nil
+}
+
+// IsEnabled returns true if failpoint is enabled.
+func (fp *Failpoint) IsEnabled() bool {
+	fp.mu.RLock()
+	defer fp.mu.RUnlock()
+
+	return fp.t != nil
+}
+
+// Spin will spin till failpoint is disabled.
+func (fp *Failpoint) Spin() {
+	for {
+		if !fp.IsEnabled() {
+			break
+		}
+		time.Sleep(1 * time.Microsecond)
+	}
 }
 
 // Disable stops a failpoint
@@ -88,7 +129,9 @@ func (fp *Failpoint) Disable() {
 		// already disabled
 		return
 	default:
-		close(fp.waitChan)
+		if fp.waitChan != nil {
+			close(fp.waitChan)
+		}
 	}
 
 	fp.mu.Lock()
@@ -99,8 +142,8 @@ func (fp *Failpoint) Disable() {
 // Eval evaluates a failpoint's value, It will return the evaluated value or
 // an error if the failpoint is disabled or failed to eval
 func (fp *Failpoint) Eval() (Value, error) {
-	fp.mu.RLock()
-	defer fp.mu.RUnlock()
+	fp.mu.Lock()
+	defer fp.mu.Unlock()
 	if fp.t == nil {
 		return nil, ErrDisabled
 	}
@@ -108,5 +151,37 @@ func (fp *Failpoint) Eval() (Value, error) {
 	if err != nil {
 		return nil, err
 	}
+	fp.hitCnt++
 	return v, nil
+}
+
+// WaitForHit spins till failpoint is evaluated
+func (fp *Failpoint) WaitForHit(timeoutSec uint) error {
+	done := make(chan bool)
+	go func() {
+		for {
+			fp.mu.RLock()
+			hitCnt := fp.hitCnt
+			fp.mu.RUnlock()
+			if hitCnt > 0 {
+				done <- true
+				return
+			}
+			time.Sleep(1 * time.Microsecond)
+		}
+	}()
+
+	select {
+	case <-done:
+		return nil
+	case <-time.After(time.Duration(timeoutSec) * time.Second):
+		return errors.Wrapf(ErrTimeout, "timeout waiting for failpoint hit")
+	}
+}
+
+// GetValue returns value set by EnableWithValue
+func (fp *Failpoint) GetValue() interface{} {
+	fp.mu.RLock()
+	defer fp.mu.RUnlock()
+	return fp.value
 }

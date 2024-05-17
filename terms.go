@@ -39,7 +39,6 @@ import (
 )
 
 func init() {
-	rand.Seed(time.Now().Unix())
 }
 
 // terms encodes the state for a failpoint term string (see fail(9) for examples)
